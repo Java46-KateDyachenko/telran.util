@@ -21,48 +21,40 @@ public class Logger implements Handler{
 	} 
 	
 	@Override
-	public boolean publish(LoggerRecord loggerRecord) {
-		switch(loggerRecord.level)  {
-        case ERROR:  
-        System.out.println(loggerRecord.message+" ERROR");
-        break;
-       case WARN: ;
-       System.out.println(loggerRecord.message+" WARN");
-        break;
-       case INFO: ;
-       System.out.println(loggerRecord.message+" INFO");
-        break;
-       case DEBUG: ;
-       System.out.println(loggerRecord.message+" DEBUG");
-        break;
-       case TRACE: ;
-       System.out.println(loggerRecord.message+" TRACE");
-        break;
-		}
+	public void publish(LoggerRecord loggerRecord) {
 		
-		return false;
+		System.out.println(loggerRecord.level+" "+loggerRecord.message);
+
+	
 	}
 	
 	public void error(String message) {
-
-		LoggerRecord loggerRecord = new LoggerRecord(zoneId, Instant.now(), Level.ERROR, "logger", message); 
+    LoggerRecord loggerRecord = new LoggerRecord(zoneId, Instant.now(), Level.ERROR, "logger", message); 
 		publish(loggerRecord);
 	}
+	
     public void warn(String message) {
     	LoggerRecord loggerRecord = new LoggerRecord(zoneId, Instant.now(), Level.WARN, "logger", message); 
-		publish(loggerRecord);
+		if (this.level!=Level.ERROR) {
+    	publish(loggerRecord);
+		}
 	}
     public void info(String message) {
     	LoggerRecord loggerRecord = new LoggerRecord(zoneId, Instant.now(), Level.INFO, "logger", message); 
-		publish(loggerRecord);
+		if (this.level==Level.TRACE||this.level==Level.DEBUG ||this.level==Level. INFO)
+    	publish(loggerRecord);
     }
     public void debug(String message) {
     	LoggerRecord loggerRecord = new LoggerRecord(zoneId, Instant.now(), Level.DEBUG, "logger", message); 
-		publish(loggerRecord);
+    	if (this.level==Level.TRACE||this.level==Level.DEBUG ) {
+    	publish(loggerRecord);
+    	}
     }
     public void trace(String message) {
     	LoggerRecord loggerRecord = new LoggerRecord(zoneId, Instant.now(), Level.TRACE, "logger", message); 
-		publish(loggerRecord);
+    	if (this.level==Level.TRACE) {
+    	publish(loggerRecord);
+    	}
     }
 	
 	
